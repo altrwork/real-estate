@@ -11,29 +11,26 @@ Teams use different tools (HubSpot, a spreadsheet, a CRM someone built). Skills 
 
 Slots are defined in `${CLAUDE_PLUGIN_ROOT}/connectors/slots.json` (what each needs, which skills use it, search keywords, fallback). The user's mapping is `connectors.json` in `$REAL_ESTATE_HOME` (default `~/.claude/real-estate/`).
 
-## Serve the connectors (the user sees them, not a text list)
+## Flow (follow in order; do not skip a phase or stop after the first slot)
 
-Start every sweep by showing the user their setup visually:
+**Phase A, detect all slots at once.** For every slot in `slots.json`, run `ToolSearch` with its `search` words (batch the calls in one turn) plus `data_coverage` for `property-data`. Do not ask anything yet.
 
-1. `mcp__mcp-registry__list_connectors` renders the connectors they already have as a card (load it with `ToolSearch` if deferred). Put one lead-in sentence before it and don't re-list them in text.
-2. Show a status table: slot, what fills it now, state (verified, detected, needs authorization, missing, manual).
-3. For each missing or unauthorized slot, run `search_mcp_registry` with the slot's `search` words, then `mcp__mcp-registry__suggest_connectors` with the matching `directoryUuid`s (set `keywords` to one generic noun like "contacts", "contracts"). That renders cards with Connect buttons, so they pick and connect in one click. Suggest 2 to 4 per slot, never more. For a connector that failed auth, pass its server uuid (from `mcp__<uuid>__tool`) so it renders a reconnect button.
-4. Use `AskUserQuestion` for choices ("Which of these is your CRM?" with the options plus "something custom" and "none"). After they connect, re-detect and verify.
+**Phase B, show the picture.** Render `mcp__mcp-registry__list_connectors` (installed connectors card; one lead-in sentence before it, no re-listing in text). Then a table with ALL slots in `slots.json` order: slot, what fills it now, state (`verified`, `detected`, `needs authorization`, `missing`). Core slots (`"core": true`: crm, email, contact-data/prospecting, outreach) are marked as required decisions.
 
-Never click Connect for them or ask for credentials.
+**Phase C, serve every gap in the same turn.** For each slot that is missing or unauthorized, in one batch of parallel calls: `search_mcp_registry` with the slot's `search` words, then one `mcp__mcp-registry__suggest_connectors` per slot (the matching `directoryUuid`s, 2 to 4 options, `keywords` a single generic noun: "contacts", "email", "prospects", "outreach", "contracts"). So the user sees Connect cards for CRM, email, prospecting and outreach together, not one at a time. For a connector that failed auth, pass its server uuid (from `mcp__<uuid>__tool`) to render a reconnect button. Never click Connect for them or ask for credentials.
 
-## Sweep (do all slots, but one at a time, skip the irrelevant)
+**Phase D, get a decision for every slot.** `AskUserQuestion` (max 4 questions per call): first call is the four core slots (CRM, email, prospecting/contact data, outreach); second call is the rest that are not already `verified` (calendar, storage, e-sign, meeting notes, team chat, listing platforms; batch into further calls of up to 4). Each question's options: the connectors you showed or detected for that slot, `Something custom or in-house`, `None / skip`. Multi-select is fine for slots where several tools are used. If they pick a card they haven't connected yet, tell them to click Connect, wait, then re-run Phase A for that slot.
 
-For each slot, in this order: property-data, crm, email, calendar, storage, esign, contact-data, outreach, meeting-notes, team-chat, listing-platforms:
+**Phase E, resolve each choice.** Connected tool: verify with one harmless read. Custom or in-house: offer the three paths in "No connector" below. None: record `provider: "none"` with the slot's fallback.
 
-1. **Detect**: look for already-connected tools with `ToolSearch` using the slot's `search` words. If found, show the tool names and ask "use this for <slot>?" Record it.
-2. **Ask**: if none, ask what they use for it ("what do you use for CRM? none is fine"). Accept anything, including "a spreadsheet" or "something we built".
-3. **Find**: for a named product, `search_mcp_registry` with its name and keywords. If a connector exists, tell them to enable it in their connector settings (claude.ai) or `/mcp`, then re-detect. Don't ask for tokens, codes or passwords in chat; credentials go in `~/.claude/settings.json` env or the connector's own sign-in.
-4. **No connector** (custom or unlisted): offer these paths, cheapest first:
-   - **Export/sync file**: a CSV, XLSX or Google Sheet path that stays current; skills read it (and write a separate log file, never silently editing their data). Fine for read-heavy needs like `list-finder`.
-   - **Their API → an MCP server**: if it has an API or database, offer to build a small MCP server for it (use the `mcp-builder` skill), then register it with `claude mcp add` (user scope). Ask what operations are safe (read-only first).
-   - **Paste/skip**: record the slot as `manual` with the slot's `fallback`.
-5. **Verify**: make one harmless read call (search one contact, list one event) and show the result. Don't write anything.
+**Gate.** Write `connectors.json` (see Record) and print the final table. Do NOT return to the caller (onboarding) until every slot, core or not, has a recorded disposition: `verified`, `connected-unverified`, `custom`, `file`, `manual` or `none`. An unanswered core slot means ask again, once.
+
+## No connector (custom or unlisted)
+
+Paths, cheapest first:
+- **Export/sync file**: a CSV, XLSX or Google Sheet that stays current; skills read it and write a separate log, never silently editing their data. Fine for read-heavy needs like `list-finder`.
+- **Their API → an MCP server**: if it has an API or database, offer to build a small MCP server for it (use the `mcp-builder` skill), then register it with `claude mcp add` (user scope). Ask which operations are safe (read-only first).
+- **Paste/skip**: record the slot as `manual` with the slot's `fallback`.
 
 ## Record
 

@@ -11,7 +11,7 @@ Short and conversational; one question at a time, skip anything already known. D
 
 ## 1. Connectors
 
-Run the `connectors` skill (a full sweep). Teams differ, so don't assume a CRM or email product; detect what's connected, ask about the rest, and record the mapping. `property-data` (`cre-harness`) is the only hard requirement: if `data_coverage` fails, tell them to authorize it via `/mcp` and pause. Everything else can be manual and added later. Also check that Chrome/Chromium exists (needed for PDFs).
+Run the `connectors` skill (a full sweep of ALL slots: CRM, email, prospecting/contact data, outreach, calendar, storage, e-sign, meeting notes, team chat, listing platforms), following its phases and gate. Do not start step 2 until it returns a disposition for every slot; serving only the CRM and moving on is a bug. Teams differ, so don't assume a CRM or email product; detect what's connected, ask about the rest, and record the mapping. `property-data` (`cre-harness`) is the only hard requirement: if `data_coverage` fails, tell them to authorize it via `/mcp` and pause. Everything else can be manual and added later. Also check that Chrome/Chromium exists (needed for PDFs).
 
 ## 2. Broker profile
 
