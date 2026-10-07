@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?{{google_fonts}}&display=swap">
+<style>
+@page { size: 9in 6in; margin: 0 }
+:root { --brand: {{primary_color}}; --brand-dark: color-mix(in srgb, var(--brand) 70%, #000); --accent: {{accent_color}}; --link: {{link_color}}; --ink: {{ink_color}}; --muted: {{muted_color}}; --tint: {{tint_color}}; --line: {{border_color}}; --tx: {{headline_transform}}; --display:"{{display_font}}",Georgia,serif; --body:"{{body_font}}",Arial,sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0 } body { font-family:var(--body); color:var(--ink) }
+.card { width:9in; height:6in; position:relative; overflow:hidden; page-break-after:always }
+.front { background:var(--tint) center/cover no-repeat }
+.front .ov { position:absolute; left:0; right:0; bottom:0; background:color-mix(in srgb, var(--brand) 88%, transparent); color:#fff; padding:.6in .5in .4in }
+.front h1 { font-family:var(--display); font-weight:700; font-size:30pt; line-height:1.08; text-transform:var(--tx) } .front .sub { font-size:13pt; margin-top:.06in }
+.front .logo { position:absolute; top:.3in; left:.4in; background:#fff; padding:.1in .2in } .front .logo img { height:.55in; width:2.2in; object-fit:contain; object-position:left center; display:block }
+.front .price { position:absolute; top:.3in; right:.4in; background:var(--brand); color:#fff; font-family:var(--display); font-size:16pt; padding:.1in .22in }
+.back { display:grid; grid-template-columns: 1.15fr 1fr }
+.back .l { padding:.45in .45in .45in .5in } .back .r { padding:.45in .5in .45in .2in; border-left:6px solid var(--accent) }
+h2 { font-family:var(--display); font-weight:700; font-size:13pt; color:var(--brand); text-transform:uppercase; letter-spacing:.05em; margin-bottom:.1in }
+ul { list-style:none } li { font-size:11pt; line-height:1.4; margin-bottom:.06in; padding-left:.18in; position:relative } li::before { content:""; position:absolute; left:0; top:.55em; width:.08in; height:.08in; background:var(--accent) }
+.addr { margin-top:.3in; font-size:10pt; color:#5d645f } .space { height:2.4in } /* USPS address block area, leave clear */
+.who { font-size:11pt; line-height:1.45 } img.agent { width:1in; height:1in; object-fit:cover; object-position:center top; display:block; margin-bottom:.1in; border:2px solid var(--accent) } .who b { font-family:var(--display); font-weight:700; font-size:14pt; color:var(--brand) }
+</style></head><body>
+<div class="card front" style="background-image:url('{{hero_photo}}')">
+  <div class="logo">{{logo_html}}</div><div class="price">{{price}}</div>
+  <div class="ov"><h1>{{headline}}</h1><div class="sub">{{address_line}}</div></div>
+</div>
+<div class="card back">
+  <div class="l"><h2>Highlights</h2><ul>{{highlights_li}}</ul></div>
+  <div class="r"><div class="who">{{agent_photo_html}}<b>{{agent_name}}</b><br>{{agent_title}} {{agent_license}}<br>{{agent_phone}}<br>{{agent_email}}<br><br>{{firm}}<br>{{web}}</div><div class="space"></div></div>
+</div>
+</body></html>

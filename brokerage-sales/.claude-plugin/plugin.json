@@ -1,0 +1,19 @@
+{
+  "name": "brokerage-sales",
+  "version": "0.1.0",
+  "description": "Commercial real estate brokerage sales for Tampa Bay brokers: prospecting, BOVs, marketing flyers, and contract-to-close admin, on public-record data from the CRE Harness connector. Built to take additional connectors.",
+  "author": {
+    "name": "altr",
+    "url": "https://mrtr.altrwork.com"
+  },
+  "keywords": [
+    "commercial-real-estate",
+    "brokerage",
+    "sales",
+    "tampa-bay",
+    "pinellas",
+    "hillsborough",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json"
+}

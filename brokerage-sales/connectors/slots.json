@@ -1,0 +1,16 @@
+{
+  "_doc": "Capability slots. Skills ask for a slot, never a product. The user's own mapping lives in <data dir>/connectors.json. 'search' are keywords for finding it among connected tools and the MCP registry.",
+  "slots": {
+    "property-data": {"label": "Property and public-record data", "needs": ["parcel lookup", "owners", "sales", "comps"], "used_by": ["buy-box","market-research","list-builder","bov","flyer","tampa-property-research"], "native": "cre-harness", "required": true, "fallback": "none: stop and tell the user to authorize cre-harness"},
+    "crm": {"label": "CRM / contact database", "needs": ["search contacts", "read notes and history", "write notes and stage", "tags or custom fields for buy box"], "used_by": ["list-finder","list-builder","marketing-outreach","contract-admin","close-out"], "search": ["crm","hubspot","salesforce","follow up boss","pipedrive","zoho","airtable","notion","sheet"], "fallback": "cre-harness workspace_* tools, then a CSV in the data dir"},
+    "email": {"label": "Email", "needs": ["search threads", "create drafts"], "used_by": ["marketing-outreach","contract-admin","close-out","bov"], "search": ["gmail","outlook","microsoft 365","email"], "shipped": ["gmail","microsoft-365"], "fallback": "give the text for the user to paste"},
+    "calendar": {"label": "Calendar", "needs": ["list events", "create events"], "used_by": ["contract-admin"], "search": ["calendar","gcal","outlook calendar"], "fallback": "list dates in the status board"},
+    "esign": {"label": "E-signature", "needs": ["send for signature", "check status"], "used_by": ["contract-admin","close-out"], "search": ["docusign","dropbox sign","pandadoc","adobe sign"], "fallback": "none: remind the user to send manually"},
+    "storage": {"label": "File storage (photos, documents)", "needs": ["read files in a property folder"], "used_by": ["flyer","bov"], "search": ["drive","dropbox","onedrive","box","sharepoint"], "fallback": "local folder path in the profile"},
+    "contact-data": {"label": "Contact enrichment", "needs": ["emails and phones for people and companies"], "used_by": ["list-builder"], "search": ["apollo","zoominfo","clay","seamless","lusha"], "fallback": "public record only (no individual owner phones)"},
+    "outreach": {"label": "Outreach and sending", "needs": ["email blasts", "postcards", "LinkedIn", "call lists"], "used_by": ["marketing-outreach"], "search": ["outreach","mailchimp","lemlist","lob","postcard","linkedin"], "fallback": "drafts only; the user sends"},
+    "team-chat": {"label": "Team chat", "needs": ["post updates"], "used_by": ["contract-admin","close-out"], "search": ["slack","teams","discord"], "fallback": "none"},
+    "listing-platforms": {"label": "Listing and market platforms", "needs": ["push listings", "read comps"], "used_by": ["flyer","marketing-outreach"], "search": ["loopnet","buildout","costar","crexi","mls"], "fallback": "none: user posts manually; sites like LoopNet block automated reads"},
+    "meeting-notes": {"label": "Meeting notes", "needs": ["read notes and transcripts"], "used_by": ["list-finder","contract-admin"], "search": ["granola","fathom","fireflies","otter","plaud"], "fallback": "none"}
+  }
+}

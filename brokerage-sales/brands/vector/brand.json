@@ -1,0 +1,27 @@
+{
+  "firm": "Vector Commercial Real Estate",
+  "web": "vectorrealty.com",
+  "phone": "(727) 823-1230",
+  "primary_color": "#19472b",
+  "accent_color": "#7aa732",
+  "link_color": "#3d7727",
+  "ink_color": "#1f2421",
+  "muted_color": "#5a635d",
+  "tint_color": "#f4f6f2",
+  "border_color": "#dfe4dc",
+  "display_font": "Roboto Condensed",
+  "body_font": "Roboto",
+  "google_fonts": "family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700",
+  "headline_transform": "uppercase",
+  "logo_horizontal": "logo-horizontal.svg",
+  "logo_stacked": "logo-stacked.svg",
+  "source": "Claude design system https://claude.ai/artifact/EGjFYoMF38uQGFKYmcGJjY (tokens.json, README, Logos)",
+  "rules": [
+    "Logo only on white or the light tint, never on the dark green or on photos; never recolor or stretch it",
+    "Accent lime is a fill (bars, blocks), never text on white; use link green for green text",
+    "Headlines in uppercase condensed display font; body in the sans; no emoji, no exclamation points",
+    "Corners square on bands and blocks, 3px on buttons, 6px on cards",
+    "Photos get a dark-green overlay behind white text; no gradients, no stock illustrations",
+    "Name the submarket (St. Petersburg, Pinellas County) rather than a generic Florida market"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "real-estate",
+  "description": "Reference plugins, skills and data connectors for commercial real estate workflows, one plugin per practice. Starts with brokerage sales for the Tampa Bay market.",
+  "owner": { "name": "altr", "url": "https://mrtr.altrwork.com" },
+  "plugins": [
+    {
+      "name": "brokerage-sales",
+      "displayName": "CRE Brokerage Sales",
+      "source": "./brokerage-sales",
+      "description": "Prospect, win the listing with a BOV, market it, and run the contract to close. Public-record research from the CRE Harness connector for Pinellas, Hillsborough, Pasco and Polk, with branded flyers, postcards and BOVs.",
+      "author": { "name": "altr" }
+    }
+  ]
+}

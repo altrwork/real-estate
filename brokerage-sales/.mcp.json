@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "cre-harness": {
+      "type": "http",
+      "url": "https://cre-mcp.weathered-boat-4f14.workers.dev/mcp"
+    },
+    "gmail": {
+      "type": "http",
+      "url": "https://gmailmcp.googleapis.com/mcp/v1"
+    },
+    "microsoft-365": {
+      "type": "http",
+      "url": "https://microsoft365.mcp.claude.com/mcp"
+    }
+  }
+}
