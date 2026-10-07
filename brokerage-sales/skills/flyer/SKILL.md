@@ -24,7 +24,7 @@ Core content: photos, highlights, area overview, specs (building size, parcel di
 
 ## Adding a brand pack
 
-`<data dir>/brands/<slug>/` (the demo `vector` pack is in the plugin's `brands/`) holds `brand.json` (firm, web, phone, `primary_color`, `accent_color`, `link_color`, `ink_color`, `muted_color`, `tint_color`, `border_color`, `display_font`, `body_font`, `google_fonts`, `headline_transform`, `logo_horizontal`, `logo_stacked`, `rules[]`) plus the logo files. `data.json` values override the pack. Create one with `brand-setup`.
+`<data dir>/brands/<slug>/` (the demo `vector` pack is in the plugin's `brands/`) holds `brand.json` (firm, web, phone, `address`, `city_state_zip` (joined into `firm_address` when `data.json` has none), `primary_color`, `accent_color`, `link_color`, `ink_color`, `muted_color`, `tint_color`, `border_color`, `display_font`, `body_font`, `google_fonts`, `headline_transform`, `logo_horizontal`, `logo_stacked`, `rules[]`) plus the logo files. `data.json` values override the pack. Create one with `brand-setup`.
 
 ## data.json fields
 

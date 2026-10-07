@@ -40,6 +40,8 @@ if brand_dir:  # brand pack fills anything data.json leaves out
         d.setdefault(k, v)
     if not d.get("logo_src") and b.get("logo_horizontal"):
         d["logo_src"] = (brand_dir / b["logo_horizontal"]).as_uri()
+    if not d.get("firm_address") and (b.get("address") or b.get("city_state_zip")):
+        d["firm_address"] = ", ".join(x for x in (b.get("address"), b.get("city_state_zip")) if x)
 e = lambda v: html.escape(str(v))
 ph = lambda name: f'<span class="ph">[{name}]</span>'
 
