@@ -43,7 +43,11 @@ Paths, cheapest first:
 
 ## Record
 
-Write `connectors.json`: `{ "<slot>": { "provider": "hubspot|custom|file|manual|none", "server": "<mcp server or tool prefix>", "tools": {"search": "...", "write_note": "..."}, "file": "<path if file-based>", "notes": "<quirks, e.g. buy box lives in custom field 'Buy Box'>", "verified": "<date>" } }`. Capture how THEIR data represents things skills need (e.g. where buy boxes, last contact and stage live). Tell the user what's connected, what's manual, and which skills are limited as a result (from `used_by`/`fallback`).
+Write `connectors.json`: `{ "<slot>": { "provider": "...", "server": "<mcp server or tool prefix>", "ops": {"<op>": {"tool": "<tool name>", "args": "<how this tool wants the contract's inputs>"}}, "file": "<path if file-based>", "notes": "<quirks, e.g. buy box lives in custom field 'Buy Box'>", "verified": "<date>" } }`.
+
+`ops` is the adapter: the contract for each slot is in `${CLAUDE_PLUGIN_ROOT}/connectors/contracts.json` (operation names, inputs, outputs, safety class). For each slot the user filled, map every contract op the tool can do, starting from `${CLAUDE_PLUGIN_ROOT}/connectors/providers/<provider>.md` if one exists (treat its hints as unverified until you list the real tools). Ops the tool cannot do are left unmapped and use the slot's fallback. Verify only `read` ops with a harmless call; never test `write`, `spend` or `send`. Capture how THEIR data represents things the contract needs (`records`, e.g. where buy boxes, last contact and stage live) in `notes`. If you learn something reusable about a provider, tell the user it can be added to `providers/<id>.md` (see CONNECTORS.md). Older mappings with a flat `tools` object still work: read them as ops.
+
+Tell the user what's connected, what's manual, and which skills are limited as a result (from `used_by`/`fallback`).
 
 ## Rules
 

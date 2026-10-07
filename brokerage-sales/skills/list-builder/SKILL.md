@@ -11,8 +11,8 @@ One list serves prospecting and marketing, so build a profile per person, not a 
 
 1. Criteria from the user or a saved box in `buy-boxes.json` (see `buy-box`); if several are active, ask which.
 2. Owners: `search_parcels` (`county`, `property_type`, sqft, `city`/`zip`) then `resolve_owner` (people behind the LLC, filing email, Form D phone for DST/LP/fund), `entities_for_person`, `get_entity`, `owner_portfolio`.
-3. Brokers/agents, lenders, attorneys: use any connected source (CRM, Apollo, etc.); `find_lenders` for lenders. Say what was and wasn't available.
+3. Brokers/agents, lenders, attorneys: use `contact-data.find_people` (and `crm.find_contacts` to avoid duplicates); `find_lenders` for lenders. `contact-data.enrich` costs credits: estimate and approval first. Say what was and wasn't available.
 4. Per row: name, entity, properties owned, mailing address, email/phone only if sourced, buy box (if known), last touch, stage.
-5. Write to the CRM connector if present, else `workspace_save` (kind `contact`, with `owner_name`, `parcel_id`, `notes` for buy box), else a CSV in the working directory.
+5. Save people with `crm.upsert_contact` (show the diff for any existing contact, dedupe on email), else `workspace_save` (kind `contact`, with `owner_name`, `parcel_id`, `notes` for buy box), else a CSV in the working directory.
 
 Dedupe on entity + mailing address. Don't fabricate contact data.

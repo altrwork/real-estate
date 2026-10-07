@@ -12,7 +12,9 @@
   ],
   "connectors": [
     "slots.json",
-    "catalog.json"
+    "catalog.json",
+    "contracts.json",
+    "providers"
   ],
   "brands": [
     "vector"

@@ -13,7 +13,7 @@ Install: `/plugin marketplace add <this repo>`, then `/plugin install brokerage-
 - `<plugin>/` is a complete plugin (`.claude-plugin/plugin.json`, `.mcp.json`, `skills/`, `hooks/`).
 - `shared/` is the source for the setup skills every plugin carries (`onboarding`, `connectors`, `brand-setup`, `real-estate-context`), the session hook, the connector slot list and demo brand. A plugin installs alone, so each carries a synced copy: edit `shared/`, then run `python3 scripts/sync-shared.py` (`--check` in CI). `{{PLUGIN}}` becomes the plugin's name.
 - User state (profile, brand packs, connector mapping, buy boxes) lives in `~/.claude/real-estate/` (override with `REAL_ESTATE_HOME`), so it is shared by every plugin.
-- Connectors are capability slots (`shared/connectors/slots.json`), not products; see the `connectors` skill.
+- Connectors are capability slots and operations (`shared/connectors/`), not products; see the `connectors` skill and [CONNECTORS.md](CONNECTORS.md).
 
 ## Adding a practice plugin
 
