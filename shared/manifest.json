@@ -1,7 +1,20 @@
 {
   "_doc": "Files synced from shared/ into every plugin by scripts/sync-shared.py. {{PLUGIN}} becomes the plugin's directory name.",
-  "skills": ["onboarding", "connectors", "brand-setup", "real-estate-context"],
-  "hooks": ["hooks.json", "session-start.sh"],
-  "connectors": ["slots.json"],
-  "brands": ["vector"]
+  "skills": [
+    "onboarding",
+    "connectors",
+    "brand-setup",
+    "real-estate-context"
+  ],
+  "hooks": [
+    "hooks.json",
+    "session-start.sh"
+  ],
+  "connectors": [
+    "slots.json",
+    "catalog.json"
+  ],
+  "brands": [
+    "vector"
+  ]
 }

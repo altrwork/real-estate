@@ -1,0 +1,17 @@
+{
+  "_doc": "Third-party MCP servers that are not in the Anthropic connector registry. The connectors skill offers them next to registry results for the matching slot and, with the user's yes, registers them for that user with `claude mcp add`. Add an entry to ship one; nothing here is installed by default.",
+  "servers": [
+    {
+      "id": "pillar",
+      "name": "Pillar",
+      "slot": "contact-data",
+      "also_fills": ["prospecting"],
+      "description": "Prospecting tool (custom MCP server, not in the Anthropic registry).",
+      "transport": "http",
+      "url": "https://app.pillar.codes/api/mcp",
+      "auth": "oauth",
+      "notes": "OAuth with dynamic client registration (checked 2026-10-07: 401 with resource metadata, Supabase auth server with a registration endpoint). The user authorizes in /mcp. Tool list unknown until connected: after connecting, list the tools and record them in connectors.json.",
+      "checked": "2026-10-07"
+    }
+  ]
+}
