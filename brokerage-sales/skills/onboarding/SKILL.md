@@ -2,7 +2,7 @@
 name: onboarding
 description: First-run setup for the real-estate plugin: check connectors, capture the broker's profile (name, firm, license, focus, photo folders, branding, CRM), and save it for later sessions. Use when the user is new to the plugin, says /onboarding or "set me up", or when no broker profile exists.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Onboarding
@@ -15,7 +15,12 @@ Run the `connectors` skill (a full sweep of ALL slots: CRM, email, prospecting/c
 
 ## 2. Broker profile
 
-Ask for, in this order: name, firm, license number, phone/email for flyers, track-record line for the BOV "why me" (e.g. firm volume, relevant deals), CRM in use, parent folder where property photo folders live (one folder per property, e.g. `Properties/1801-28th-st-n/`), and the path to their headshot (a clear head-and-shoulders photo), and where brand guidelines/logo are. Never invent or guess any of these.
+Ask for, in this order: name, firm, title (printed on flyers and BOVs), license number, phone/email for flyers, track-record line for the BOV "why me" (e.g. firm volume, relevant deals), parent folder where property photo folders live (one folder per property, e.g. `Properties/1801-28th-st-n/`), the path to their headshot (a clear head-and-shoulders photo), and where brand guidelines/logo are. The CRM was already decided in step 1; copy it into the profile, don't ask again. Never invent or guess any of these.
+
+- **Skippable:** license, title and track record can be skipped; record them as `(not provided)` and say flyers and BOVs will leave them off.
+- **License help:** if they don't know it, in Florida it is on the DBPR lookup (myfloridalicense.com, "Search for a license", Real Estate Commission, by name; sales associates read SL#######, brokers BK#######). Offer to skip, don't guess.
+- **Email check:** if the flyer email doesn't look like the person's name or the firm's domain, confirm it once before saving.
+- **Where files live:** keep photo folders and the headshot outside the plugin directory (suggest `$REAL_ESTATE_HOME/properties/` and `$REAL_ESTATE_HOME/headshot/`). Files inside the plugin repo can end up committed and published.
 
 Buy boxes are NOT part of the profile. If the user names a focus, hand off to `buy-box` to save it as an editable box; say they can change it any time.
 
@@ -23,7 +28,7 @@ Buy boxes are NOT part of the profile. If the user names a focus, hand off to `b
 
 Record paths as absolute paths. Write `profile.md` to `$REAL_ESTATE_HOME` (default `~/.claude/real-estate/`, shared by every plugin in this marketplace; create the directory). Use a short bullet list, one fact per line. Tell the user where it is. The SessionStart hook loads it every session; they can edit it by hand or re-run this skill.
 
-Then hand off to `brand-setup` so flyers and postcards carry THEIR brand (the bundled `vector` pack is a demo; don't use it for them). Offer `set_brand` too so BOVs match.
+Then hand off to `brand-setup` so flyers and postcards carry THEIR brand (the bundled `vector` pack is a demo; use it only for someone at Vector). Offer `set_brand` too so BOVs match; brand-setup shows current vs new first, since the stored brand may belong to another firm.
 
 ## 3b. Check
 
