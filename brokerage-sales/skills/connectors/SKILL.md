@@ -2,7 +2,7 @@
 name: connectors
 description: Sweep and set up the user's tools (CRM, email, calendar, e-sign, storage, enrichment, outreach, and more) and map them to what the plugin's skills need. Use for connector setup, when the user says they use HubSpot, a custom CRM, or any tool, when a skill reports a missing connector, or says /connectors.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Connectors
@@ -15,9 +15,9 @@ Slots are defined in `${CLAUDE_PLUGIN_ROOT}/connectors/slots.json` (what each ne
 
 **Phase A, detect all slots at once.** For every slot in `slots.json`, run `ToolSearch` with its `search` words (batch the calls in one turn) plus `data_coverage` for `property-data`. Do not ask anything yet.
 
-**Phase B, show the picture.** Render `mcp__mcp-registry__list_connectors` (installed connectors card; one lead-in sentence before it, no re-listing in text). Then a table with ALL slots in `slots.json` order: slot, what fills it now, state (`verified`, `detected`, `needs authorization`, `missing`). Core slots (`"core": true`: crm, email, contact-data/prospecting, outreach) are marked as required decisions.
+**Phase B, show the picture.** Render `mcp__mcp-registry__list_connectors` (installed connectors card; one lead-in sentence before it, no re-listing in text). If the `mcp__mcp-registry__*` tools are not available (`ToolSearch` finds nothing), say once that Connect cards are unavailable in this session and continue with text only: no card, and Phase C uses `catalog.json` plus what Phase A detected. Then a table with ALL slots in `slots.json` order: slot, what fills it now, state (`verified`, `detected`, `needs authorization`, `missing`). Core slots (`"core": true`: crm, email, contact-data/prospecting, outreach) are marked as required decisions.
 
-**Phase C, serve every gap in the same turn.** For each slot that is missing or unauthorized, in one batch of parallel calls: `search_mcp_registry` with the slot's `search` words, then read `${CLAUDE_PLUGIN_ROOT}/connectors/catalog.json` for custom servers whose `slot` matches (list them next to the registry cards as "custom connector, not in the registry"), then one `mcp__mcp-registry__suggest_connectors` per slot (the matching `directoryUuid`s, 2 to 4 options, `keywords` a single generic noun: "contacts", "email", "prospects", "outreach", "contracts"). So the user sees Connect cards for CRM, email, prospecting and outreach together, not one at a time. For a connector that failed auth, pass its server uuid (from `mcp__<uuid>__tool`) to render a reconnect button. Never click Connect for them or ask for credentials.
+**Phase C, serve every gap in the same turn.** For each slot that is missing or unauthorized, in one batch of parallel calls (skip the `mcp-registry` calls if those tools are unavailable): `search_mcp_registry` with the slot's `search` words, then read `${CLAUDE_PLUGIN_ROOT}/connectors/catalog.json` for custom servers whose `slot` matches (list them next to the registry cards as "custom connector, not in the registry"), then one `mcp__mcp-registry__suggest_connectors` per slot (the matching `directoryUuid`s, 2 to 4 options, `keywords` a single generic noun: "contacts", "email", "prospects", "outreach", "contracts"). So the user sees Connect cards for CRM, email, prospecting and outreach together, not one at a time. For a connector that failed auth, pass its server uuid (from `mcp__<uuid>__tool`) to render a reconnect button. Never click Connect for them or ask for credentials.
 
 **Phase D, get a decision for every slot.** `AskUserQuestion` (max 4 questions per call): first call is the four core slots (CRM, email, prospecting/contact data, outreach); second call is the rest that are not already `verified` (calendar, storage, e-sign, meeting notes, team chat, listing platforms; batch into further calls of up to 4). Each question's options: the connectors you showed or detected for that slot, `Something custom or in-house`, `None / skip`. Multi-select is fine for slots where several tools are used. If they pick a card they haven't connected yet, tell them to click Connect, wait, then re-run Phase A for that slot.
 
