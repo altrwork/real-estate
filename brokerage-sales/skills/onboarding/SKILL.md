@@ -7,6 +7,8 @@ metadata:
 
 # Onboarding
 
+**Data dir.** Resolve it first: run `echo "${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}"` and use that exact path for every read and write of `profile.md`, `connectors.json`, `buy-boxes.json`, `active-brand` and `brands/`. Never type `~/.claude/real-estate` by hand: `REAL_ESTATE_HOME` points test runs at a scratch folder, and the session-start text names the resolved path.
+
 Short and conversational; one question at a time, skip anything already known. Don't lecture about the plugin.
 
 ## 1. Connectors

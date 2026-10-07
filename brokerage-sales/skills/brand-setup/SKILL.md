@@ -7,6 +7,8 @@ metadata:
 
 # Brand setup
 
+**Data dir.** Resolve it first: run `echo "${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}"` and use that exact path for every read and write of `profile.md`, `connectors.json`, `buy-boxes.json`, `active-brand` and `brands/`. Never type `~/.claude/real-estate` by hand: `REAL_ESTATE_HOME` points test runs at a scratch folder, and the session-start text names the resolved path.
+
 Every broker brings their own brand. Packs live in `$REAL_ESTATE_HOME/brands/<slug>/` (default `~/.claude/real-estate/brands/<slug>/`, shared by every plugin here) so plugin updates don't erase them. The bundled `vector` pack in the plugin is a demo: use it only if the user says their firm is Vector Commercial Real Estate, and then copy it into the data dir like any other pack. Never present it as the brand of anyone else.
 
 ## 1. Pick a source (ask which they have)

@@ -3,7 +3,10 @@
 root="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 profile="${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}/profile.md"
 
+data="${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}"
 echo "# real-estate plugin context"
+echo "Data dir (REAL_ESTATE_HOME): $data. Read and write profile.md, connectors.json, buy-boxes.json, active-brand and brands/ ONLY here; never hardcode ~/.claude/real-estate."
+echo
 awk 'BEGIN{c=0} /^---$/ {c++; next} c>=2' "$root/skills/real-estate-context/SKILL.md"
 echo
 if [ -f "$profile" ]; then

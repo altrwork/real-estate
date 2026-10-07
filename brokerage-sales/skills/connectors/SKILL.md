@@ -7,6 +7,8 @@ metadata:
 
 # Connectors
 
+**Data dir.** Resolve it first: run `echo "${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}"` and use that exact path for every read and write of `profile.md`, `connectors.json`, `buy-boxes.json`, `active-brand` and `brands/`. Never type `~/.claude/real-estate` by hand: `REAL_ESTATE_HOME` points test runs at a scratch folder, and the session-start text names the resolved path.
+
 Teams use different tools (HubSpot, a spreadsheet, a CRM someone built). Skills therefore ask for a CAPABILITY SLOT, not a product. This skill finds what the user has, connects what's missing, and records the mapping. Re-run it any time.
 
 Slots are defined in `${CLAUDE_PLUGIN_ROOT}/connectors/slots.json` (what each needs, which skills use it, search keywords, fallback). The user's mapping is `connectors.json` in `$REAL_ESTATE_HOME` (default `~/.claude/real-estate/`).

@@ -7,6 +7,8 @@ metadata:
 
 # Buy box
 
+**Data dir.** Resolve it first: run `echo "${REAL_ESTATE_HOME:-$HOME/.claude/real-estate}"` and use that exact path for every read and write of `profile.md`, `connectors.json`, `buy-boxes.json`, `active-brand` and `brands/`. Never type `~/.claude/real-estate` by hand: `REAL_ESTATE_HOME` points test runs at a scratch folder, and the session-start text names the resolved path.
+
 A buy box = asset type + geography + size (optionally hold period, owner type). It replaces what brokers use CoStar for, sourced from the Hillsborough/Pinellas (also Pasco/Polk) property appraiser rolls via `cre-harness`.
 
 1. Get the three parts. If the user has no focus yet, run `market-research` first. Default to what they know best.
