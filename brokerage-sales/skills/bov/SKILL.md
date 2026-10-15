@@ -2,7 +2,7 @@
 name: bov
 description: Produce the Broker Opinion of Value that earns the listing: the "why me" pitch to the owner, as a branded landscape PowerPoint deck. Use when a prospect shows interest or the user says /bov or asks for a BOV, opinion of value, or listing proposal.
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # BOV
@@ -22,19 +22,19 @@ The deck that wins the listing, so it needs a broker's voice and a "why me", not
 
 ## Slides
 
-1. Cover
-2. **Opinion of Value**: the letter (what we did and our conclusion) and the contents, on one slide. Contents numbers follow the slides that are present.
-3. Executive summary: value, range, three key stats, short narrative
-4. Location overview (optional: `location`)
-5. Property overview (optional: `property`)
-6. Zoning and land use (optional: `zoning`)
-7. Market and economic drivers (optional: `market`)
-8. Valuation methodology (optional: `methodology`)
-9. Comparable sales: table plus a $/SF chart (`comps`)
-10. Valuation summary: indications table, value, range, what could move it
-11. Marketing and disposition strategy (optional: `strategy`)
+Each section opens with a title slide (section number, name, and the slides in it). A section with no slides is dropped and the rest renumber.
 
-A section left out of `data.json` is skipped, and the contents renumber.
+| Section | Slides |
+|---|---|
+| Cover | Cover |
+| 1 Introduction | **Opinion of Value** (the letter and the contents on one slide, with section page numbers), executive summary |
+| 2 Location Overview | Location overview (`location`), market and economic drivers (`market`) |
+| 3 Property Overview | Property overview (`property`), zoning and land use (`zoning`) |
+| 4 Property Valuation | Valuation methodology (`methodology`), comparable sales with a $/SF chart (`comps`), valuation summary (`valuation`) |
+| 5 Marketing Strategy | Marketing and disposition strategy (`strategy`) |
+| 6 About Us | Firm story, stats, and the broker's bio (`about`) |
+
+A slide whose section is left out of `data.json` is skipped. `about` always prints; unset fields show `[placeholders]`, so fill it from the brand profile (firm history, credentials) and never invent track record.
 
 ## data.json
 

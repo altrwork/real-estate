@@ -124,28 +124,30 @@ const th = (t, align) => ({ text: t, options: { bold: true, color: C.white, fill
 const tblBase = (o) => Object.assign({ fontFace: BODY, color: C.ink, border: { type: "solid", pt: 0.75, color: C.line }, valign: "middle", margin: [0.04, 0.1, 0.04, 0.1] }, o);
 const cell = (t, o) => ({ text: String(t), options: Object.assign({ fill: { color: C.white } }, o || {}) });
 
-// ---- section plan (drives the contents on slide 2)
+// ---- section plan: a title slide, then the section's slides. Sections with no slides drop out.
 const subj = d.subject_sf, loc = d.location, prop = d.property, zon = d.zoning, mkt = d.market, meth = d.methodology,
   cmp = d.comps, val = d.valuation, strat = d.strategy;
 const valueStr = d.value ? money(d.value) : ph("value");
 const rLo = d.range_low ? round5k(d.range_low) : null, rHi = d.range_high ? round5k(d.range_high) : null;
 const rangeStr = rLo && rHi ? rangeText(rLo, rHi) : ph("range");
-const sections = [
-  { key: "summary", title: "Executive summary", note: d.contents_notes?.summary || `${d.value ? mil(d.value) + " million value, range, and key facts" : "Value, range, and key facts"}`, on: true },
-  { key: "location", title: "Location overview", note: d.contents_notes?.location || "Aerial, frontage, and traffic counts", on: have(loc) },
-  { key: "property", title: "Property overview", note: d.contents_notes?.property || "Building, site, parcel, and ownership", on: have(prop) },
-  { key: "zoning", title: "Zoning and land use", note: d.contents_notes?.zoning || "Zoning, plan category, flood zone", on: have(zon) },
-  { key: "market", title: "Market and economic drivers", note: d.contents_notes?.market || "Jobs, wages, and demographics", on: have(mkt) },
-  { key: "method", title: "Valuation methodology", note: d.contents_notes?.method || "How we screened and reconciled the sales", on: have(meth) },
-  { key: "comps", title: "Comparable sales", note: d.contents_notes?.comps || "The sales behind the value", on: have(cmp) },
-  { key: "valuation", title: "Valuation summary", note: d.contents_notes?.valuation || `${rangeStr}${d.value ? ", " + mil(d.value) + " million value" : ""}`, on: have(val) || (d.value != null) },
-  { key: "strategy", title: "Marketing and disposition strategy", short: "Marketing and disposition", note: d.contents_notes?.strategy || "Your options for taking it to market", on: have(strat) },
-].filter((x) => x.on);
-sections.forEach((x, i) => { x.n = i + 3; });  // 1 cover, 2 letter + contents
-const pageOf = {}; sections.forEach((x) => (pageOf[x.key] = x.n));
+const SECTIONS = [
+  { title: "Introduction", slides: [["letter", "Opinion of value", true], ["summary", "Executive summary", true]] },
+  { title: "Location Overview", slides: [["location", "Location overview", have(loc)], ["market", "Market and economic drivers", have(mkt)]] },
+  { title: "Property Overview", slides: [["property", "Property overview", have(prop)], ["zoning", "Zoning and land use", have(zon)]] },
+  { title: "Property Valuation", slides: [["method", "Valuation methodology", have(meth)], ["comps", "Comparable sales", have(cmp)], ["valuation", "Valuation summary", have(val) || d.value != null]] },
+  { title: "Marketing Strategy", slides: [["strategy", "Marketing and disposition strategy", have(strat)]] },
+  { title: "About Us", slides: [["about", "About us", true]] },
+].map((x) => ({ title: x.title, slides: x.slides.filter((y) => y[2]).map((y) => ({ key: y[0], title: y[1] })) })).filter((x) => x.slides.length);
+const order = [{ key: "cover" }];  // slide order; the page number is index + 1
+SECTIONS.forEach((sec, i) => {
+  sec.n = i + 1; sec.page = order.length + 1;
+  order.push({ key: "divider", sec });
+  sec.slides.forEach((sl) => order.push({ key: sl.key }));
+});
+const R = {};  // slide renderers
 
-// ---- 1 cover
-{
+// ---- cover
+R.cover = () => {
   const s = pres.addSlide({ masterName: "COVER" });
   if (logo) s.addImage({ path: logo.path, x: 0.6, y: 0.6, w: 0.5 * logo.ratio, h: 0.5 });
   disp(s, "BROKER OPINION OF VALUE", { x: 0.6, y: 1.9, w: 4.9, h: 1.9, fontSize: 40, valign: "top", paraSpaceAfter: 0 });
@@ -162,8 +164,8 @@ const pageOf = {}; sections.forEach((x) => (pageOf[x.key] = x.n));
   else s.addShape(pres.ShapeType.rect, { x: 5.9, y: 0, w: 5.1, h: 8.5, fill: { color: C.line }, line: { color: C.line } });
 }
 
-// ---- 2 letter + contents (one slide)
-{
+// ---- letter + contents (one slide)
+R.letter = () => {
   const s = slideWith("Opinion of Value");
   card(s, 0.6, 1.3, 5.9, 6.2);
   const letter = [
@@ -185,18 +187,19 @@ const pageOf = {}; sections.forEach((x) => (pageOf[x.key] = x.n));
 
   card(s, 6.7, 1.3, 3.7, 6.2);
   disp(s, upper("Contents"), { x: 6.95, y: 1.45, w: 3.2, h: 0.35, fontSize: 14 });
-  const rowH = Math.min(0.6, 5.5 / sections.length);
-  sections.forEach((x, i) => {
-    const y = 1.9 + i * rowH;
-    if (i > 0) s.addShape(pres.ShapeType.line, { x: 6.95, y: y - 0.04, w: 3.2, h: 0, line: { color: C.line, width: 0.75 } });
-    disp(s, String(x.n), { x: 6.95, y, w: 0.35, h: 0.3, fontSize: 14, color: C.link });
-    disp(s, upper(x.short || x.title), { x: 7.35, y, w: 2.85, h: 0.22, fontSize: 10.5, valign: "middle", paraSpaceAfter: 0 });
-    txt(s, x.note, { x: 7.35, y: y + 0.23, w: 2.85, h: rowH - 0.3, fontSize: 9, color: C.muted, paraSpaceAfter: 0 });
+  const rowH = Math.min(0.9, 5.3 / SECTIONS.length);
+  SECTIONS.forEach((sec, i) => {
+    const y = 1.95 + i * rowH;
+    if (i > 0) s.addShape(pres.ShapeType.line, { x: 6.95, y: y - 0.08, w: 3.2, h: 0, line: { color: C.line, width: 0.75 } });
+    disp(s, String(sec.n), { x: 6.95, y, w: 0.35, h: 0.3, fontSize: 14, color: C.link });
+    disp(s, upper(sec.title), { x: 7.35, y, w: 2.3, h: 0.25, fontSize: 11, valign: "middle", paraSpaceAfter: 0 });
+    txt(s, String(sec.page), { x: 9.65, y, w: 0.5, h: 0.25, fontSize: 11, color: C.muted, align: "right", valign: "middle", paraSpaceAfter: 0 });
+    txt(s, sec.slides.map((x) => x.title).join("  \u00B7  "), { x: 7.35, y: y + 0.27, w: 2.8, h: rowH - 0.4, fontSize: 9, color: C.muted, paraSpaceAfter: 0 });
   });
-}
+};
 
 // ---- executive summary
-{
+R.summary = () => {
   const s = slideWith("Executive Summary");
   card(s, 0.6, 1.3, 4.7, 2.5, C.brand);
   disp(s, upper("Opinion of sale value"), { x: 0.9, y: 1.5, w: 4.1, h: 0.3, fontSize: 14, color: C.white });
@@ -213,7 +216,7 @@ const pageOf = {}; sections.forEach((x) => (pageOf[x.key] = x.n));
 }
 
 // ---- location
-if (have(loc)) {
+R.location = () => {
   const s = slideWith("Location Overview");
   if (exists(loc.image)) s.addImage({ path: loc.image, x: 0.6, y: 1.3, w: 4.65, h: 6.2, sizing: { type: "cover", w: 4.65, h: 6.2 } });
   else card(s, 0.6, 1.3, 4.65, 6.2, C.line);
@@ -222,7 +225,7 @@ if (have(loc)) {
 }
 
 // ---- property overview
-if (have(prop)) {
+R.property = () => {
   const s = slideWith("Property Overview");
   const rows = (prop.rows || []).map(([k, v]) => [cell(k, { bold: true }), cell(v)]);
   s.addTable(rows, tblBase({ x: 0.6, y: 1.3, w: 6.1, colW: [1.7, 4.4], rowH: 0.5, fontSize: 12 }));
@@ -235,7 +238,7 @@ if (have(prop)) {
 }
 
 // ---- zoning
-if (have(zon)) {
+R.zoning = () => {
   const s = slideWith("Zoning and Land Use");
   (zon.cards || []).slice(0, 3).forEach((c, i) => {
     const x = 0.6 + i * 3.35;
@@ -253,7 +256,7 @@ if (have(zon)) {
 }
 
 // ---- market and economic drivers
-if (have(mkt)) {
+R.market = () => {
   const s = slideWith("Market and Economic Drivers");
   (mkt.stats || []).slice(0, 3).forEach((st, i) => bigStat(s, 0.6 + i * 3.35, 1.3, 3.1, 1.45, T(st.big, "stat"), T(st.label, "label"), 36, 13));
   disp(s, T(mkt.headline, "headline"), { x: 0.6, y: 3.05, w: 9.8, h: 0.45, fontSize: 20, valign: "middle" });
@@ -268,7 +271,7 @@ if (have(mkt)) {
 }
 
 // ---- methodology
-if (have(meth)) {
+R.method = () => {
   const s = slideWith("Valuation Methodology");
   txt(s, T(meth.intro, "method intro"), { x: 0.6, y: 1.3, w: 9.8, h: 0.8, fontSize: 16 });
   (meth.steps || []).slice(0, 4).forEach((st, i) => {
@@ -283,7 +286,7 @@ if (have(meth)) {
 }
 
 // ---- comparable sales
-if (have(cmp)) {
+R.comps = () => {
   const s = slideWith("Comparable Sales");
   const rows = (cmp.rows || []);
   const hdr = [th("Address"), th("Sold"), th("SF", "right"), th("Built", "right"), th("Price", "right"), th("$ / SF", "right")];
@@ -306,7 +309,7 @@ if (have(cmp)) {
 }
 
 // ---- valuation summary
-if (have(val) || d.value != null) {
+R.valuation = () => {
   const s = slideWith("Valuation Summary: Sale");
   txt(s, T(val?.intro, "valuation intro"), { x: 0.6, y: 1.3, w: 9.8, h: 0.8, fontSize: 16 });
   const ind = val?.indications || [];
@@ -325,7 +328,7 @@ if (have(val) || d.value != null) {
 }
 
 // ---- strategy
-if (have(strat)) {
+R.strategy = () => {
   const s = slideWith("Marketing and Disposition Strategy");
   txt(s, T(strat.intro, "strategy intro"), { x: 0.6, y: 1.3, w: 9.8, h: 0.7, fontSize: 16 });
   const opts = (strat.options || []).slice(0, 3);
@@ -340,4 +343,41 @@ if (have(strat)) {
   if (strat.note) txt(s, strat.note, { x: 0.6, y: 5.4, w: 9.8, h: 2.0, fontSize: 14 });
 }
 
+// ---- section title slide
+pres.defineSlideMaster({ title: "SECTION", background: { color: C.brand }, objects: [] });
+R.divider = (sec) => {
+  const s = pres.addSlide({ masterName: "SECTION" });
+  s.addShape(pres.ShapeType.rect, { x: 0.6, y: 2.6, w: 0.18, h: 3.1, fill: { color: C.accent }, line: { color: C.accent } });
+  disp(s, String(sec.n).padStart(2, "0"), { x: 1.1, y: 2.5, w: 3, h: 1.0, fontSize: 54, color: C.accent, valign: "middle", paraSpaceAfter: 0 });
+  disp(s, upper(sec.title), { x: 1.1, y: 3.55, w: 9.3, h: 1.1, fontSize: 44, color: C.white, valign: "middle", paraSpaceAfter: 0 });
+  txt(s, sec.slides.map((x) => ({ text: x.title, options: { breakLine: true } })), { x: 1.1, y: 4.8, w: 9.3, h: 1.2, fontSize: 16, color: C.white, paraSpaceAfter: 4 });
+  txt(s, `${T(d.address_street, "address")}, ${T(d.address_city, "city")}`, { x: 0.6, y: 7.6, w: 9.8, h: 0.4, fontSize: 11, color: C.white, valign: "middle" });
+};
+
+// ---- about us
+R.about = () => {
+  const a = d.about || {};
+  const s = slideWith("About Us");
+  card(s, 0.6, 1.3, 5.9, 3.4);
+  disp(s, upper(`Why ${firm}`), { x: 0.85, y: 1.5, w: 5.4, h: 0.35, fontSize: 16 });
+  txt(s, paras(a.paragraphs?.length ? a.paragraphs : [ph("about the firm")], 13), { x: 0.85, y: 1.95, w: 5.4, h: 2.6 });
+  card(s, 6.7, 1.3, 3.7, 3.4, C.brand);
+  const stats = a.stats?.length ? a.stats.slice(0, 3) : [{ big: ph("stat"), label: ph("label") }];
+  const sh = 3.0 / stats.length;
+  stats.forEach((st, i) => {
+    disp(s, T(st.big, "stat"), { x: 6.95, y: 1.45 + i * sh, w: 3.2, h: 0.6, fontSize: 28, color: C.white, valign: "middle", paraSpaceAfter: 0 });
+    txt(s, T(st.label, "label"), { x: 6.95, y: 2.05 + i * sh, w: 3.2, h: sh - 0.7, fontSize: 12, color: C.white });
+  });
+  card(s, 0.6, 4.95, 9.8, 2.5);
+  let tx = 0.85;
+  if (exists(d.agent_photo)) { s.addImage({ path: d.agent_photo, x: 0.85, y: 5.2, w: 1.4, h: 1.4, rounding: true, sizing: { type: "cover", w: 1.4, h: 1.4 } }); tx = 2.5; }
+  txt(s, [
+    { text: T(d.agent_name, "agent name"), options: { bold: true, fontSize: 18, color: C.brand, fontFace: DISPLAY, breakLine: true } },
+    { text: [d.agent_title, d.agent_license].filter(Boolean).join("  |  ") || ph("title"), options: { fontSize: 12, color: C.muted, breakLine: true } },
+    { text: T(a.bio, "agent bio"), options: { fontSize: 12 } },
+  ], { x: tx, y: 5.15, w: 9.65 - tx, h: 1.5, paraSpaceAfter: 4 });
+  txt(s, `${T(d.agent_phone, "phone")}  |  ${T(d.agent_email, "email")}${d.web ? "  |  " + d.web : ""}`, { x: tx, y: 6.8, w: 9.65 - tx, h: 0.4, fontSize: 12, bold: true, color: C.link, valign: "middle" });
+};
+
+order.forEach((o) => R[o.key](o.sec));
 pres.writeFile({ fileName: outPath }).then((f) => console.log(f));

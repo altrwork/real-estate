@@ -1,6 +1,6 @@
 {
   "name": "brokerage-sales",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Commercial real estate brokerage sales for Tampa Bay brokers: prospecting, BOVs, marketing flyers, and contract-to-close admin, on public-record data from the CRE Harness connector. Built to take additional connectors.",
   "author": {
     "name": "altr",

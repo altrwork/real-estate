@@ -292,5 +292,23 @@
     "note": "Next steps: share current leases and the rent roll, if any. Tell us your timeline and whether you plan to stay in the building. We will add rent comps and a lease valuation to this opinion. Walk the building together to confirm condition."
   },
   "cover_image": "/absolute/path/aerial.jpg",
-  "agent_photo": "/absolute/path/headshot.jpg"
+  "agent_photo": "/absolute/path/headshot.jpg",
+  "agent_title": "Broker",
+  "about": {
+    "paragraphs": [
+      "Two or three short paragraphs on the firm: how long, where, what you focus on.",
+      "Name the submarket, not a generic Florida market."
+    ],
+    "stats": [
+      {
+        "big": "40+ years",
+        "label": "In the Tampa Bay and Pinellas County market"
+      },
+      {
+        "big": "15,000+ SF",
+        "label": "Industrial and warehouse focus"
+      }
+    ],
+    "bio": "One or two sentences on the broker: who they advise and how."
+  }
 }
