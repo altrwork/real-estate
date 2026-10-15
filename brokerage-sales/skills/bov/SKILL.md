@@ -38,7 +38,7 @@ A slide whose section is left out of `data.json` is skipped. `about` always prin
 
 ## data.json
 
-Top level: `address_street, address_city, property_line, prepared_for, prepared_date, salutation, agent_name, agent_title, agent_phone, agent_email, agent_photo, cover_image, subject_sf, value, range_low, range_high, letter[], contents_notes{}`, plus the sections above. `references/example-data.json` shows every field. Brand fields in `data.json` (`primary_color`, `display_font`, `firm`, `logo`) override the pack. Image paths must be absolute.
+Top level: `address_street, address_city, property_line, prepared_for, prepared_date, salutation, agent_name, agent_title, agent_phone, agent_email, agent_photo, cover_image, subject_sf, value, range_low, range_high, letter[], about{paragraphs[], stats[], bio}`, plus the sections above. `references/example-data.json` shows every field. Brand fields in `data.json` (`primary_color`, `display_font`, `firm`, `logo`) override the pack. Image paths must be absolute.
 
 `value` is the broker's number. `range_low`/`range_high` are raw numbers (the indicated low and high); the builder rounds them to the nearest $5,000 and prints them as "$3.4 to $3.8 million". Comp `$/SF` and indication totals are computed from the numbers you give, so don't type them.
 
