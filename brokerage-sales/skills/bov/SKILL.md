@@ -1,33 +1,55 @@
 ---
 name: bov
-description: Produce the Broker Opinion of Value that earns the listing: the "why me" pitch to the owner, in the broker's own brand. Use when a prospect shows interest or the user says /bov or asks for a BOV, opinion of value, or listing proposal.
+description: Produce the Broker Opinion of Value that earns the listing: the "why me" pitch to the owner, as a branded landscape PowerPoint deck. Use when a prospect shows interest or the user says /bov or asks for a BOV, opinion of value, or listing proposal.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # BOV
 
-The document that wins the listing, so it needs a broker's voice and a "why me", not only a number. Facts come from `cre-harness`; layout and branding come from this plugin's brand pack, so nothing depends on the brand stored on the CRE Harness account.
+The deck that wins the listing, so it needs a broker's voice and a "why me", not only a number. Facts come from `cre-harness`; layout and branding come from this plugin's brand pack, so nothing depends on the brand stored on the CRE Harness account. Output is a Letter landscape (11 x 8.5 in) `.pptx` the broker can edit.
 
 ## Steps
 
-1. **Facts** (all from `cre-harness`; keep the `as_of` date): `resolve_address` / `lookup_property` (owner, use, SF, year, acres, last sale), `sale_history` (deed chain), `property_zoning`, `flood_zone`, `traffic_counts`, `resolve_owner` (people behind the LLC; use names only, never home addresses or emails in the document), `site_aerial` (see `flyer` for the labeled-aerial SVG).
-2. **Comps**: `comparable_sales` with `parcel_id` (screens are built in; optional `window_months`, `cities`, `property_type`). Show the user the comps and range before rendering; they can drop or re-window comps. Copy comps verbatim; never add one.
-3. **Broker's judgment**: ask for the value conclusion, recommended asking price, a short summary, and the "why me" (firm, track record, relevant deals; from the profile). Never invent these; unset fields print as visible placeholders. Income data (rent roll, NOI) is owner-supplied only; public record has none.
-4. **Brand**: the active brand pack (`brand-setup`), same as the flyer. Agent headshot via `agent_photo`.
-5. **Render**: write `data.json`, then
-   `python3 "${CLAUDE_PLUGIN_ROOT}/skills/flyer/scripts/render.py" bov data.json <folder>/BOV.pdf --brand <slug>`
-   Open the PDF and check every page before handing it over. Needs Chrome or Chromium.
+1. **Facts** (all from `cre-harness`; keep the `as_of` date): `lookup_property` (owner, use, SF, year, acres, last sale), `sale_history` (deed chain), zoning and flood zone, traffic counts, `resolve_owner` (people behind the LLC; names only, never home addresses or emails in the document), `site_imagery` (see `flyer` for the labeled-aerial approach). Demographics and jobs for the market slide are not in the connector; use them only from a source you can cite, or skip that slide.
+2. **Comps**: `comparable_sales` with `parcel_id` (screens are built in; optional `window_months`, `cities`, `property_type`). Show the user the comps and range before building; they can drop or re-window comps. Copy comps verbatim; never add one. Compute the indications (average, median, any excluded-comp variant) from those comps only.
+3. **Broker's judgment**: ask for the value conclusion, a short summary, and anything the deck says about strategy or the market. Never invent these; unset fields print as visible `[placeholders]`. Income data (rent roll, NOI) is owner-supplied only; public record has none.
+4. **Brand**: the active brand pack (`brand-setup`), same as the flyer. Agent headshot as `agent_photo`.
+5. **Build**: write `data.json` (see `references/example-data.json`), then
+   `node "${CLAUDE_PLUGIN_ROOT}/skills/bov/scripts/build_deck.js" data.json <folder>/BOV.pptx --brand <slug>`
+   Needs `pptxgenjs` (`npm install -g pptxgenjs`); Chrome or Chromium turns an SVG logo into a bitmap. Open the deck and check every slide before handing it over.
 6. Send only after the user approves, and only as a draft email via Gmail (`marketing-outreach` rules). Log `workspace_save` stage `bov_sent` on the deal.
 
-## data.json (BOV fields, on top of the brand and agent fields in `flyer`)
+## Slides
 
-`address_street, address_city, property_line, prepared_date, prepared_for, cover_image (aerial SVG), range_low, range_high, range_mid, rate_median, rate_q1, rate_q3` (raw numbers from `comparable_sales`: `indicated_low/high/mid`, `median`, `q1`, `q3`; the renderer rounds the range to the nearest $5,000), `subject_sf, comps_basis, as_of, evidence_text, method_text, value_conclusion, asking_price, executive_summary, why_us, facts{}, ownership{}, comps[{address, sale_date, sqft, year_built, sale_price, psf}], deeds[{date, price, grantor, grantee}]`.
+1. Cover
+2. **Opinion of Value**: the letter (what we did and our conclusion) and the contents, on one slide. Contents numbers follow the slides that are present.
+3. Executive summary: value, range, three key stats, short narrative
+4. Location overview (optional: `location`)
+5. Property overview (optional: `property`)
+6. Zoning and land use (optional: `zoning`)
+7. Market and economic drivers (optional: `market`)
+8. Valuation methodology (optional: `methodology`)
+9. Comparable sales: table plus a $/SF chart (`comps`)
+10. Valuation summary: indications table, value, range, what could move it
+11. Marketing and disposition strategy (optional: `strategy`)
+
+A section left out of `data.json` is skipped, and the contents renumber.
+
+## data.json
+
+Top level: `address_street, address_city, property_line, prepared_for, prepared_date, salutation, agent_name, agent_title, agent_phone, agent_email, agent_photo, cover_image, subject_sf, value, range_low, range_high, letter[], contents_notes{}`, plus the sections above. `references/example-data.json` shows every field. Brand fields in `data.json` (`primary_color`, `display_font`, `firm`, `logo`) override the pack. Image paths must be absolute.
+
+`value` is the broker's number. `range_low`/`range_high` are raw numbers (the indicated low and high); the builder rounds them to the nearest $5,000 and prints them as "$3.4 to $3.8 million". Comp `$/SF` and indication totals are computed from the numbers you give, so don't type them.
+
+## Writing the letter
+
+Plain and first-person: thank the owner, say what the opinion rests on (which comps, which ZIP or submarket), give the range and the value in the same numbers the valuation slide shows, say what we have not seen (leases, rent roll, condition) and that it could move the number, and offer to walk through it. Four short paragraphs; it shares the slide with the contents.
 
 ## Method text must match what was done
 
-The template's range is the comparable sales' rate band times building SF, midpoint = median rate times SF. Describe exactly that, nothing more. Do not claim assessment-multiple or adjustment methods the plugin didn't run. State that it is not an appraisal.
+The range is the comparable sales' rate band times building SF. Describe exactly that, nothing more. Do not claim assessment-multiple, income or adjustment methods the plugin didn't run. State that it is not an appraisal.
 
 ## Alternative: server-rendered BOV
 
-`generate_bov` (CRE Harness) renders a finished PDF with its own method and Google street-level imagery, but only in the brand stored on the account (one per account) and with the logo uploaded in mortr. Use it only if the user asks for that version; before running, `get_brand` and stop if it isn't their brand (sync via `brand-setup` step 4 with a yes).
+`generate_bov` (CRE Harness) renders a finished PDF with its own method and Google street-level imagery, but only in the brand stored on the account (one per account). Use it only if the user asks for that version; before running, `get_brand` and stop if it isn't their brand (sync via `brand-setup` step 4 with a yes).

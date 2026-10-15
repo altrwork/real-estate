@@ -1,0 +1,296 @@
+{
+  "address_street": "4800 126th Avenue North",
+  "address_city": "Clearwater, FL 33762",
+  "prepared_for": "Sample Owner",
+  "prepared_date": "October 2026",
+  "salutation": "Dear Mr. Owner,",
+  "agent_name": "Agent Name",
+  "agent_phone": "(555) 555-0100",
+  "agent_email": "agent@example.com",
+  "subject_sf": 24820,
+  "value": 3600000,
+  "range_low": 3408700,
+  "range_high": 3819100,
+  "letter": [
+    "Thank you for the chance to look at 4800 126th Avenue North. This opinion of value rests on recent sales of comparable industrial buildings in the 33762 ZIP code.",
+    "Five comparable sales support a value range of $3.4 to $3.8 million for the 24,820-square-foot building. At the five-sale average of $145 per square foot, we value the property at about $3,600,000.",
+    "We built this from public records: the county appraiser, recorded sales, zoning, flood maps, and traffic counts. We have not seen leases, a rent roll, or the building's condition. Any of those could move the number, and we would like to see them.",
+    "I am glad to walk you through the comps and the math whenever it suits you."
+  ],
+  "exec": {
+    "stats": [
+      {
+        "big": "24,820 SF",
+        "label": "Building, one story"
+      },
+      {
+        "big": "1.78 AC",
+        "label": "Site, M-1 zoning"
+      },
+      {
+        "big": "1982",
+        "label": "Year built"
+      }
+    ],
+    "paragraphs": [
+      "Five comparable industrial sales in ZIP 33762 set the value. Average $145.55 per square foot, median $153.87.",
+      "The closest comp, 12625 40th Street N, is the same 1982 vintage and sold in April 2026 at $158 per square foot.",
+      "The building is owner-occupied with three business accounts on site, so rent and lease terms are the biggest unknown.",
+      "Zoning is M-1 Light Industrial. The site is in flood zone X, minimal hazard."
+    ]
+  },
+  "location": {
+    "image": "/absolute/path/aerial-context.jpg",
+    "text": "The site sits on the south side of 126th Avenue North at 47th Way North, just east of CR 611 (49th Street North). The surrounding blocks are light-industrial buildings of similar size.",
+    "stats": [
+      {
+        "big": "3,700",
+        "label": "Vehicles per day on the frontage segment, 49th St N to 44th St N (2025)"
+      },
+      {
+        "big": "4,900",
+        "label": "Vehicles per day, CR 611 / 49th St N count station (2025)"
+      }
+    ]
+  },
+  "property": {
+    "image": "/absolute/path/aerial.jpg",
+    "rows": [
+      [
+        "Address",
+        "4800 126th Avenue N, Clearwater, FL 33762"
+      ],
+      [
+        "Parcel",
+        "Pinellas County 16-30-09-70992-400-0201"
+      ],
+      [
+        "Owner of record",
+        "Newbuy Properties Ltd"
+      ],
+      [
+        "Building",
+        "24,820 SF gross (24,420 heated), one story, metal frame, block and stucco"
+      ],
+      [
+        "Year built",
+        "1982 (county effective year 1998)"
+      ],
+      [
+        "Site",
+        "1.784 acres (77,702 SF)"
+      ],
+      [
+        "Use",
+        "Light manufacturing (DOR code 4120)"
+      ],
+      [
+        "Zoning",
+        "M-1 Light Industrial, Pinellas Park"
+      ],
+      [
+        "Flood zone",
+        "X, area of minimal flood hazard"
+      ],
+      [
+        "Occupancy",
+        "Owner-occupied; three business accounts at the address"
+      ],
+      [
+        "County just value",
+        "$2,200,000 (2026 roll)"
+      ],
+      [
+        "Last sale",
+        "Sept. 2005, $1,500,000, unqualified (not used as a comp)"
+      ]
+    ],
+    "stats": [
+      {
+        "big": "24,820 SF",
+        "label": "pre-engineered metal warehouse"
+      },
+      {
+        "big": "1.78 acres",
+        "label": "about 32% building coverage"
+      }
+    ]
+  },
+  "zoning": {
+    "cards": [
+      {
+        "big": "M-1",
+        "title": "Zoning district",
+        "text": "Light Industrial. Pinellas Park administers zoning at this address, even though the mailing address reads Clearwater."
+      },
+      {
+        "big": "E",
+        "title": "Countywide plan category",
+        "text": "Employment, on the Forward Pinellas Countywide Plan Map. This is the tier above the zoning district, not a substitute for it."
+      },
+      {
+        "big": "X",
+        "title": "FEMA flood zone",
+        "text": "Area of minimal flood hazard. The preliminary map shows the same zone."
+      }
+    ],
+    "other": "No historic district, overlay, or urban village applies, and the site is not in an opportunity zone.",
+    "confirm": "We have not reviewed Pinellas Park's M-1 code. Permitted uses, outdoor storage, and any nonconforming status should be confirmed with the city before pricing a specific buyer's use."
+  },
+  "market": {
+    "stats": [
+      {
+        "big": "439,747",
+        "label": "Jobs in Pinellas County, 2026 Q1"
+      },
+      {
+        "big": "41,905",
+        "label": "Business establishments"
+      },
+      {
+        "big": "$1,452",
+        "label": "Average weekly wage"
+      }
+    ],
+    "headline": "Pinellas County has a deep employment base, and this ZIP sits inside it.",
+    "demographics": {
+      "cols": [
+        "ZIP 33762",
+        "Pinellas County"
+      ],
+      "rows": [
+        [
+          "Population",
+          "5,039",
+          "960,565"
+        ],
+        [
+          "Households",
+          "2,591",
+          "423,242"
+        ],
+        [
+          "Median household income",
+          "$91,024",
+          "$70,293"
+        ],
+        [
+          "Median age",
+          "54.0",
+          "48.9"
+        ]
+      ]
+    },
+    "callout": "At the site. The building sits among similar light-industrial buildings, with direct access to CR 611.",
+    "sources": "Sources: Census tract and ZIP data, county employment data (2026 Q1), 2025 traffic counts."
+  },
+  "methodology": {
+    "intro": "We used the Sales Comparison Approach: what similar buildings recently sold for, per square foot, applied to this building.",
+    "steps": [
+      {
+        "title": "Screen",
+        "text": "Industrial buildings in ZIP 33762, 12,410 to 37,230 SF (about half to one and a half times the subject), sold since October 2024."
+      },
+      {
+        "title": "Exclude",
+        "text": "We dropped 7 portfolio sales and 13 unqualified transfers. A 2005 sale of the subject itself is also left out."
+      },
+      {
+        "title": "Compare",
+        "text": "Price per square foot of gross building area, so every sale is measured the same way."
+      },
+      {
+        "title": "Reconcile",
+        "text": "The average and the median set the range. The five-sale average sets the single value."
+      }
+    ],
+    "note": "We did not use the Income Approach. Public records carry no rents, leases, or operating expenses for this property."
+  },
+  "comps": {
+    "rows": [
+      {
+        "address": "12625 40th St N",
+        "sold": "Apr 2026",
+        "sf": 28800,
+        "built": 1982,
+        "price": 4550000
+      },
+      {
+        "address": "13750 49th St N",
+        "sold": "Feb 2026",
+        "sf": 16247,
+        "built": 1967,
+        "price": 2500000
+      },
+      {
+        "address": "11881 44th St N",
+        "sold": "Dec 2025",
+        "sf": 13500,
+        "built": 1973,
+        "price": 1499000
+      },
+      {
+        "address": "11286 47th St N #1 (condo)",
+        "sold": "Apr 2025",
+        "sf": 17375,
+        "built": 1991,
+        "price": 3100000
+      },
+      {
+        "address": "4810 110th Ave N",
+        "sold": "Jan 2025",
+        "sf": 14971,
+        "built": 1957,
+        "price": 1893000
+      }
+    ],
+    "subject": {
+      "address": "4800 126th Ave N",
+      "built": 1982
+    },
+    "note": "12625 40th St N also sold in Oct 2024 for $3.0M ($104 per SF). It rose 52% in 18 months, so we treat it as the high-water mark, not the norm. 11286 47th St N #1 is a condo unit, a different product. The next page shows its effect on the average."
+  },
+  "valuation": {
+    "intro": "Five comparable sales support a value range of $3.4 to $3.8 million. At the five-sale average of $145 per square foot, the property is valued at $3,600,000.",
+    "indications": [
+      {
+        "label": "Average of five sales",
+        "psf": 145.55
+      },
+      {
+        "label": "Median of five sales (high end)",
+        "psf": 153.87
+      },
+      {
+        "label": "Average without the condo unit (low end)",
+        "psf": 137.34
+      }
+    ],
+    "range_text": "The average without the condo sets the low end and the five-sale median sets the high end, which gives $3.4 to $3.8 million. The five-sale average falls inside that range and is our single value. It is about $145 per square foot on the 24,820-square-foot gross building area.",
+    "could_move": [
+      "Leases, tenants, and rent. We have not seen them.",
+      "Roof, systems, and building condition.",
+      "The yard. At 32% coverage, the site carries more open land than most comps."
+    ]
+  },
+  "strategy": {
+    "intro": "The building is owner-occupied, so the right path depends on what you want to do with your own operation. Three options:",
+    "options": [
+      {
+        "title": "Sell and relocate",
+        "text": "Market the building to owner-users and investors. Close, then move your operation on a timeline we set together."
+      },
+      {
+        "title": "Sell and lease back",
+        "text": "Sell to an investor and stay as a tenant. This needs a lease, so rent and term become part of the price."
+      },
+      {
+        "title": "Hold and lease",
+        "text": "Keep the building and lease some or all of it. We would need rent comps to set the asking rate."
+      }
+    ],
+    "note": "Next steps: share current leases and the rent roll, if any. Tell us your timeline and whether you plan to stay in the building. We will add rent comps and a lease valuation to this opinion. Walk the building together to confirm condition."
+  },
+  "cover_image": "/absolute/path/aerial.jpg",
+  "agent_photo": "/absolute/path/headshot.jpg"
+}

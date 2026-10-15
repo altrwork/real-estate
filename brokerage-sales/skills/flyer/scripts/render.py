@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fill a template with data.json and render a PDF with headless Chrome.
 
-usage: render.py <flyer|postcard|bov> data.json out.pdf [--brand <name|folder>] [--photos <folder>]
+usage: render.py <flyer|postcard> data.json out.pdf [--brand <name|folder>] [--photos <folder>]
 Without --brand, the brand named in <data dir>/active-brand is used, if any.
 data.json "agent_photo" (headshot path) is optional; no headshot, no slot.
 List fields (highlights, specs, photos) are turned into HTML here. Missing values render as
@@ -28,8 +28,6 @@ elif (data_home / "active-brand").exists():
     brand_dir = find_brand((data_home / "active-brand").read_text().strip())
 kind, data_path, out = args[:3]
 root = pathlib.Path(__file__).resolve().parent.parent / "references"
-if kind == "bov":
-    root = pathlib.Path(__file__).resolve().parents[2] / "bov" / "references"
 d = json.load(open(data_path))
 if brand_dir:  # brand pack fills anything data.json leaves out
     b = json.load(open(brand_dir / "brand.json"))
@@ -52,27 +50,6 @@ if photos_dir:  # hero = file named hero*, else first by name; next four fill th
     if hero and not d.get("hero_photo"): d["hero_photo"] = hero.as_uri()
     if rest and not d.get("photos"): d["photos"] = [p.as_uri() for p in rest[:4]]
 
-if kind == "bov":  # raw numbers in data.json; formatted and tabulated here
-    money = lambda v: f"${float(v):,.0f}" if v not in (None, "") else None
-    for k in ("range_low", "range_high", "range_mid"):  # a range from public comps is not precise to the dollar
-        if d.get(k): d[k] = round(float(d[k]) / 5000) * 5000
-    for k in ("range_low", "range_high", "range_mid", "value_conclusion", "asking_price", "rate_median", "rate_q1", "rate_q3"):
-        d[k + "_f"] = money(d.get(k)) or ph(k.replace("_", " "))
-    comps = d.get("comps", [])
-    med = d.get("rate_median")
-    d["comps_n"] = len(comps)
-    d["comps_rows"] = "".join(
-        f"<tr><td>{e(c['address'])}</td><td>{e(c['sale_date'])}</td><td class='num'>{c['sqft']:,}</td><td class='num'>{e(c.get('year_built',''))}</td>"
-        f"<td class='num'>{money(c['sale_price'])}</td><td class='num'>${c['psf']:,.0f}</td>"
-        f"<td class='num'>{(c['psf']/med-1)*100:+.0f}%</td></tr>" if med else
-        f"<tr><td>{e(c['address'])}</td><td>{e(c['sale_date'])}</td><td class='num'>{c['sqft']:,}</td><td class='num'>{e(c.get('year_built',''))}</td><td class='num'>{money(c['sale_price'])}</td><td class='num'>${c['psf']:,.0f}</td><td></td></tr>"
-        for c in comps)
-    d["deed_rows"] = "".join(
-        f"<tr><td>{e(x['date'])}</td><td class='num'>{money(x['price']) if x.get('price') else '&mdash;'}</td><td>{e(x['grantor'])}</td><td>{e(x['grantee'])}</td></tr>"
-        for x in d.get("deeds", []))
-    for key, name in (("facts", "facts_rows"), ("ownership", "owner_rows")):
-        d[name] = "".join(f"<tr><td>{e(k)}</td><td>{e(v)}</td></tr>" for k, v in d.get(key, {}).items())
-    d["cover_image"] = d.get("cover_image") or d.get("aerial_labeled", "")
 d["highlights_li"] = "".join(f"<li>{e(x)}</li>" for x in d.get("highlights", [])) or f"<li>{ph('highlights')}</li>"
 d["specs_rows"] = "".join(f"<tr><td>{e(k)}</td><td>{e(v)}</td></tr>" for k, v in d.get("specs", {}).items()) or f"<tr><td>{ph('specs')}</td><td></td></tr>"
 d["photo_tiles"] = "".join(f"<div style=\"background-image:url('{e(p)}')\"></div>" for p in d.get("photos", [])[:4])
@@ -80,7 +57,7 @@ d["area_overview_html"] = "".join(f"<p>{e(p)}</p>" for p in d.get("area_overview
 
 d["agent_photo_html"] = (f'<img class="agent" src="{e(pathlib.Path(d["agent_photo"]).expanduser().resolve().as_uri() if "://" not in d["agent_photo"] else d["agent_photo"])}" alt="">'
                          if d.get("agent_photo") else "")
-for k, v in (("cover_image", ""),("prepared_date", ""),("hero_photo", ""), ("aerial_labeled", ""), ("agent_title", ""), ("agent_license", ""), ("listing_type", ""),
+for k, v in (("hero_photo", ""), ("aerial_labeled", ""), ("agent_title", ""), ("agent_license", ""), ("listing_type", ""),
              ("accent_color", d.get("primary_color", "#000")), ("link_color", d.get("primary_color", "#000")), ("ink_color", "#1f2421"),
              ("muted_color", "#5a635d"), ("tint_color", "#f1f3f0"), ("border_color", "#dfe4dc"), ("headline_transform", "none")):
     d.setdefault(k, v)
