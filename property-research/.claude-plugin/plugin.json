@@ -1,0 +1,20 @@
+{
+  "name": "property-research",
+  "version": "0.1.0",
+  "description": "Property research for Tampa Bay: recently sold properties and comps from county appraiser sales records, via the CRE Harness connector.",
+  "author": {
+    "name": "altr",
+    "url": "https://mrtr.altrwork.com"
+  },
+  "keywords": [
+    "commercial-real-estate",
+    "research",
+    "sales",
+    "comps",
+    "tampa-bay",
+    "pinellas",
+    "hillsborough",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json"
+}

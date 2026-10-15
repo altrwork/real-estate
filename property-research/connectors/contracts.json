@@ -1,0 +1,49 @@
+{
+  "_doc": "Adapter contracts. A skill performs an OPERATION (slot.op); the user's connectors.json maps each op to a real tool. 'safety': read = no side effects; write = changes the user's data (confirm bulk or overwriting writes); spend = costs credits or money (approve each time); send = reaches another person (draft first, explicit approval each time). An unmapped op uses the slot's fallback and says so once.",
+  "slots": {
+    "crm": {
+      "ops": {
+        "find_contacts": {"safety": "read", "in": "name | email | company | free text", "out": "contacts[{id, name, org, email, phone, tags, last_touch}]"},
+        "find_by_buy_box": {"safety": "read", "in": "criteria (asset type, area, size)", "out": "contacts whose recorded buy box fits, with the note or field that shows it. If the CRM has no buy-box field, search notes/tags and say that matches are inferred."},
+        "get_history": {"safety": "read", "in": "contact_id", "out": "notes, calls, emails, deals, newest first"},
+        "add_note": {"safety": "write", "in": "contact_id, text, kind(note|call|email|meeting)", "out": "note id"},
+        "set_stage": {"safety": "write", "in": "contact_or_deal_id, stage", "out": "ok. Stages used by this plugin: lead, pitched, bov_sent, listing_signed, on_market, under_contract, closed, lost; map to the CRM's own stage names."},
+        "upsert_contact": {"safety": "write", "in": "fields", "out": "contact id. Dedupe on email; never overwrite a non-empty field without showing the diff and getting a yes."}
+      },
+      "records": "Buy box, last contact and stage must live somewhere; the mapping's `notes` says where (custom field, tag, note prefix)."
+    },
+    "email": {
+      "ops": {
+        "search_threads": {"safety": "read", "in": "query", "out": "threads with sender, subject, date"},
+        "draft": {"safety": "write", "in": "to, subject, body, attachments", "out": "draft id/link. Drafts only; this is the default for outbound."},
+        "send": {"safety": "send", "in": "draft id", "out": "sent id. Explicit approval for each message."}
+      }
+    },
+    "contact-data": {
+      "ops": {
+        "find_people": {"safety": "read", "in": "role, company, geography, or owner entity", "out": "people with sourced email/phone where the tool has them"},
+        "enrich": {"safety": "spend", "in": "person or company", "out": "emails/phones. Costs credits: state the estimate and get approval first."},
+        "lookup_company": {"safety": "read", "in": "name or domain", "out": "company profile"}
+      },
+      "records": "Individual owners' phones are not in public record; only enrichment tools can supply them. Cite which source gave each contact detail."
+    },
+    "outreach": {
+      "ops": {
+        "draft_campaign": {"safety": "write", "in": "list, channel(email|postcard|linkedin|calls), content", "out": "draft or saved campaign, not started"},
+        "add_to_sequence": {"safety": "send", "in": "contacts, sequence", "out": "enrolled count. Reaches people: explicit approval of the exact list and message each time."},
+        "log_touch": {"safety": "write", "in": "contact_id, channel, summary", "out": "ok (usually crm.add_note)"}
+      }
+    },
+    "calendar": {
+      "ops": {
+        "list_events": {"safety": "read", "in": "time range", "out": "events"},
+        "create_event": {"safety": "write", "in": "title, start, end, attendees", "out": "event link. Default no invitations sent; inviting others is a send."}
+      }
+    },
+    "storage": {"ops": {"list_files": {"safety": "read", "in": "folder", "out": "files"}, "read_file": {"safety": "read", "in": "file", "out": "contents"}}},
+    "esign": {"ops": {"status": {"safety": "read", "in": "envelope", "out": "status and signers"}, "send_for_signature": {"safety": "send", "in": "document, signers", "out": "envelope id. Explicit approval each time."}}},
+    "team-chat": {"ops": {"post": {"safety": "send", "in": "channel, text", "out": "message link. Explicit approval each time."}}},
+    "meeting-notes": {"ops": {"find_meetings": {"safety": "read", "in": "folder or date or person", "out": "meetings"}, "get_notes": {"safety": "read", "in": "meeting id", "out": "notes or transcript"}}},
+    "listing-platforms": {"ops": {}}
+  }
+}

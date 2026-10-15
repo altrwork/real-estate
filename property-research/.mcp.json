@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cre-harness": {
+      "type": "http",
+      "url": "https://cre-mcp.weathered-boat-4f14.workers.dev/mcp"
+    }
+  }
+}
